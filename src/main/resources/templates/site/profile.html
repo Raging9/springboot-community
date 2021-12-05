@@ -5,7 +5,9 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<link rel="icon" href="https://static.nowcoder.com/images/logo_87_87.png"/>
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" crossorigin="anonymous">
+
 	<link rel="stylesheet" th:href="@{/css/global.css}" />
+
 	<title>牛客网-个人主页</title>
 </head>
 <body>
@@ -44,6 +46,7 @@
 						<div class="text-muted mt-3 mb-5">
 							<span>关注了 <a class="text-primary" href="followee.html">5</a> 人</span>
 							<span class="ml-4">关注者 <a class="text-primary" href="follower.html">123</a> 人</span>
+
 							<span class="ml-4">获得了 <i class="text-danger" th:text="${likeCount}">87</i> 个赞</span>
 						</div>
 					</div>
