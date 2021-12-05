@@ -14,6 +14,7 @@ public class LikeService {
     @Autowired
     private RedisTemplate redisTemplate;
 
+
     // 点赞
     public void like(int userId, int entityType, int entityId,int authId) {
         redisTemplate.execute(new SessionCallback() {
