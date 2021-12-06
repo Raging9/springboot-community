@@ -61,7 +61,7 @@ public class FollowController {
     }
 
     /**
-     * 某用户的关注
+     * 某用户的关注列表
      * @param userId
      * @param page
      * @param model
@@ -92,7 +92,7 @@ public class FollowController {
 
 
     /**
-     * 某用户的粉丝
+     * 某用户的粉丝列表
      * @param userId
      * @param page
      * @param model
