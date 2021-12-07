@@ -29,7 +29,12 @@ public class MessageController {
     @Autowired
     private UserService userService;
 
-    // 私信列表
+    /**
+     * 登录用户的会话列表
+     * @param model
+     * @param page
+     * @return
+     */
     @RequestMapping(path = "/letter/list", method = RequestMethod.GET)
     public String getLetterList(Model model, Page page) {
         User user = hostHolder.getUser();
@@ -63,6 +68,13 @@ public class MessageController {
         return "/site/letter";
     }
 
+    /**
+     * 登录用户的某一个会话的详情列表
+     * @param conversationId
+     * @param page
+     * @param model
+     * @return
+     */
     @RequestMapping(path = "/letter/detail/{conversationId}", method = RequestMethod.GET)
     public String getLetterDetail(@PathVariable("conversationId") String conversationId, Page page, Model model) {
         // 分页信息
@@ -85,16 +97,17 @@ public class MessageController {
 
         // 私信目标
         model.addAttribute("target", getLetterTarget(conversationId));
-
-        // 设置已读
+        //未读私信的id
         List<Integer> ids = getLetterIds(letterList);
         if (!ids.isEmpty()) {
+            // 设置已读
             messageService.readMessage(ids);
         }
 
         return "/site/letter-detail";
     }
 
+    //私信的目标
     private User getLetterTarget(String conversationId) {
         String[] ids = conversationId.split("_");
         int id0 = Integer.parseInt(ids[0]);
@@ -107,6 +120,7 @@ public class MessageController {
         }
     }
 
+    //获取未读的私信
     private List<Integer> getLetterIds(List<Message> letterList) {
         List<Integer> ids = new ArrayList<>();
 
@@ -121,6 +135,12 @@ public class MessageController {
         return ids;
     }
 
+    /**
+     * 发送私信
+     * @param toName
+     * @param content
+     * @return
+     */
     @RequestMapping(path = "/letter/send", method = RequestMethod.POST)
     @ResponseBody
     public String sendLetter(String toName, String content) {
