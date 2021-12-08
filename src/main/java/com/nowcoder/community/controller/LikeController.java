@@ -64,7 +64,6 @@ public class LikeController implements CommunityConstant {
             eventProducer.fireEvent(event);
         }
 
-
         return CommunityUtil.getJSONString(0, null, map);
     }
 

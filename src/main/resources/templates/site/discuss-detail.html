@@ -164,7 +164,7 @@
 										<span th:text="${#dates.format(rvo.reply.createTime,'yyyy-MM-dd HH:mm:ss')}">2019-04-15 15:32:18</span>
 										<ul class="d-inline float-right">
 											<li class="d-inline ml-2">
-												<a href="javascript:;" th:onclick="|like(this,2,${rvo.reply.id},${rvo.reply.userId},,${post.id});|" class="text-primary">
+												<a href="javascript:;" th:onclick="|like(this,2,${rvo.reply.id},${rvo.reply.userId},${post.id});|" class="text-primary">
 													<b th:text="${rvo.likeStatus==1?'已赞':'赞'}">赞</b>(<i th:text="${rvo.likeCount}">1</i>)
 												</a>
 											</li>
@@ -174,7 +174,7 @@
 										<div th:id="|huifu-${rvoStat.count}|" class="mt-4 collapse">
 											<form method="post" th:action="@{|/comment/add/${post.id}|}">
 												<div>
-													<input type="text" class="input-size" name="content" th:placeholder="|回复${rvo.user.username}|"/>
+													<input type="text" class="input-size" name="content" th:placeholder="|回复${rvo.user.username}|" required/>
 													<input type="hidden" name="entityType" value="2">
 													<input type="hidden" name="entityId" th:value="${cvo.comment.id}">
 													<input type="hidden" name="targetId" th:value="${rvo.user.id}">
@@ -191,7 +191,7 @@
 								<li class="pb-3 pt-3">
 									<form method="post" th:action="@{|/comment/add/${post.id}|}">
 										<div>
-											<input type="text" class="input-size" name="content" placeholder="请输入你的观点"/>
+											<input type="text" class="input-size" name="content" placeholder="请输入你的观点" required/>
 											<input type="hidden" name="entityType" value="2">
 											<input type="hidden" name="entityId" th:value="${cvo.comment.id}">
 										</div>
