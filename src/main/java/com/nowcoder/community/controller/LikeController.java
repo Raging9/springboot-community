@@ -51,9 +51,9 @@ public class LikeController implements CommunityConstant {
         map.put("likeCount", likeCount);
         map.put("likeStatus", likeStatus);
 
-        //触发点赞事件
+        //触发点赞事件（登录用户操作自己的实体除外）
         //点赞了才会去发布消息
-        if(likeStatus==1){
+        if(likeStatus==1&&entityUserId!=user.getId()){
             Event event = new Event()
                     .setTopic(TOPIC_LIKE)
                     .setUserId(hostHolder.getUser().getId())

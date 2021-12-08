@@ -34,6 +34,7 @@ public class CommentController implements CommunityConstant {
 
     /**
      * 发布评论
+     *
      * @param discussPostId
      * @param comment
      * @return
@@ -44,29 +45,38 @@ public class CommentController implements CommunityConstant {
         comment.setStatus(0);
         comment.setCreateTime(new Date());
         commentService.addComment(comment);
-        //触发评论事件
-        Event event = new Event();
-        event.setTopic(TOPIC_COMMENT)
-                .setUserId(hostHolder.getUser().getId())
-                .setEntityType(comment.getEntityType())
-                .setEntityId(comment.getEntityId())
-                .setData("postId",discussPostId);
-
-        if(comment.getEntityType()==ENTITY_TYPE_POST){
+        if (comment.getEntityType() == ENTITY_TYPE_POST) {
             DiscussPost target = discussPostService.findDiscussPostById(comment.getEntityId());
-            //作者
-            event.setEntityUserId(target.getUserId());
-        }else if(comment.getEntityType()==ENTITY_TYPE_COMMENT){
+            if (target.getUserId() != hostHolder.getUser().getId()) {
+                //触发评论事件（除了自己评论自己的帖子和评论）
+                Event event = new Event();
+                event.setTopic(TOPIC_COMMENT)
+                        .setUserId(hostHolder.getUser().getId())
+                        .setEntityType(comment.getEntityType())
+                        .setEntityId(comment.getEntityId())
+                        .setData("postId", discussPostId)
+                        .setEntityUserId(target.getUserId());//帖子作者
+                eventProducer.fireEvent(event);
+            }
+        } else if (comment.getEntityType() == ENTITY_TYPE_COMMENT) {
             Comment target = commentService.findCommentById(comment.getEntityId());
-            //作者
-            event.setEntityUserId(target.getUserId());
+            if (target.getUserId() != hostHolder.getUser().getId()) {
+                //触发评论事件（除了自己评论自己的帖子和评论）
+                Event event = new Event();
+                event.setTopic(TOPIC_COMMENT)
+                        .setUserId(hostHolder.getUser().getId())
+                        .setEntityType(comment.getEntityType())
+                        .setEntityId(comment.getEntityId())
+                        .setData("postId", discussPostId)
+                        .setEntityUserId(target.getUserId());//评论或者评论的评论（回复）的作者
+                eventProducer.fireEvent(event);
+            }
         }
-        eventProducer.fireEvent(event);
 
         //如果评论给帖子
-        if(comment.getEntityType()==ENTITY_TYPE_POST){
-            //触发发帖事件，把帖子存进es服务器(更新评论量)
-            event = new Event()
+        if (comment.getEntityType() == ENTITY_TYPE_POST) {
+            //触发发帖事件，把帖子存进es服务器(就是更新帖子的评论量)
+            Event event = new Event()
                     .setTopic(TOPIC_PUBLISH)
                     .setUserId(hostHolder.getUser().getId())
                     .setEntityType(ENTITY_TYPE_POST)
